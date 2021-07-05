@@ -15,12 +15,21 @@ namespace TesteTecnicoQualyteam
     {
 
         /// <summary>
-        /// gdvDados control.
+        /// gridDocumentos control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gdvDados;
+        protected global::System.Web.UI.WebControls.GridView gridDocumentos;
+
+        /// <summary>
+        /// TTQdb control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource TTQdb;
     }
 }

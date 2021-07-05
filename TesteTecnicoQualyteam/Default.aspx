@@ -5,8 +5,8 @@
  
     <div class="jumbotron" style="display: flex; justify-content:space-around;">
         <div class="">
-        <h1>Projeto XYZ</h1>
-        <p class="lead">Gerenciador de documentos do Projeto XYZ.</p>
+        <h1>XYZ</h1>
+        <p class="lead">Gerenciador de documentos da empresa XYZ.</p>
         </div>
         <img src="Content\Images\documento.png" height="150"/>
       </div>
