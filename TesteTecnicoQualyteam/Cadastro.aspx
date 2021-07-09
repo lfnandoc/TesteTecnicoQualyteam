@@ -42,7 +42,7 @@
         <br />
         <div>
             <br />
-            <asp:FileUpload ID="FileUploadControl" runat="server" class="multi" AllowMultiple="True" />
+            <asp:FileUpload ID="FileUploadControl" runat="server" class="multi" />
             <br />
             <asp:Label runat="server" ID="StatusLabel" Text="" ForeColor="Red" />
             <br />

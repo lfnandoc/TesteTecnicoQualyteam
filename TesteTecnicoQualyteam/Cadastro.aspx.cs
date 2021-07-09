@@ -24,58 +24,61 @@ namespace TesteTecnicoQualyteam
                 {
                     if (FileUploadControl.HasFile)
                     {
-                        try
-                        {
-
-                            string extensao = Path.GetExtension(hpf.FileName);
-                            string[] extensoes_permitidas = new string[] { ".pdf", ".doc", ".docx", ".xls", ".xlsx" };
-                            if (extensoes_permitidas.Contains<string>(extensao))
+                       
+                            try
                             {
 
-                                try
+                                string extensao = Path.GetExtension(hpf.FileName);
+                                string[] extensoes_permitidas = new string[] { ".pdf", ".doc", ".docx", ".xls", ".xlsx" };
+                                if (extensoes_permitidas.Contains<string>(extensao))
                                 {
-                                    conexao.Open();
-                                    MySqlCommand checarCodigo = new MySqlCommand("SELECT id FROM documentos WHERE id = '" + Int32.Parse(input_Codigo.Text) + "'", conexao);
-                                    if (checarCodigo.ExecuteScalar() == null)
-                                    {
-                                        string filename = Path.GetFileNameWithoutExtension(hpf.FileName);
-                                        string nomefinal = Math.Abs(filename.GetHashCode()) + "_" + DateTime.Now.ToFileTimeUtc() + extensao;
-                                        string enderecofinal = Server.MapPath("./uploads/") + nomefinal;
-                                        string insertData = "INSERT INTO documentos(id, titulo, processo, categoria, arquivo, hora_upload) values (@id, @titulo, @processo, @categoria, @arquivo, @data)";
-                                        MySqlCommand command = new MySqlCommand(insertData, conexao);
-                                        command.Parameters.AddWithValue("@id", Int32.Parse(input_Codigo.Text));
-                                        command.Parameters.AddWithValue("@titulo", input_Titulo.Text);
-                                        command.Parameters.AddWithValue("@processo", input_Processo.Text);
-                                        command.Parameters.AddWithValue("@categoria", input_Categoria.Text);
-                                        command.Parameters.AddWithValue("@arquivo", nomefinal);
-                                        command.Parameters.AddWithValue("@data", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                                        command.ExecuteNonQuery();
-                                        hpf.SaveAs(enderecofinal);
-                                        conexao.Close();
-                                        StatusLabel.Text = "Carregamento bem sucedido!";
-                                        input_Codigo.Text = input_Titulo.Text = input_Processo.Text = input_Categoria.Text = "";
-                                    }
-                                    else
-                                    {
-                                        StatusLabel.Text = "Já existe um documento com este código.";
-                                    }
-                                }
 
-                                catch (Exception ex)
+                                    try
+                                    {
+                                        conexao.Open();
+                                        MySqlCommand checarCodigo = new MySqlCommand("SELECT id FROM documentos WHERE id = '" + Int32.Parse(input_Codigo.Text) + "'", conexao);
+                                        if (checarCodigo.ExecuteScalar() == null)
+                                        {
+                                            string filename = Path.GetFileNameWithoutExtension(hpf.FileName);
+                                            string nomefinal = Math.Abs(filename.GetHashCode()) + "_" + DateTime.Now.ToFileTimeUtc() + extensao;
+                                            string enderecofinal = Server.MapPath("./uploads/") + nomefinal;
+                                            string insertData = "INSERT INTO documentos(id, titulo, processo, categoria, arquivo, hora_upload) values (@id, @titulo, @processo, @categoria, @arquivo, @data)";
+                                            MySqlCommand command = new MySqlCommand(insertData, conexao);
+                                            command.Parameters.AddWithValue("@id", Int32.Parse(input_Codigo.Text));
+                                            command.Parameters.AddWithValue("@titulo", input_Titulo.Text);
+                                            command.Parameters.AddWithValue("@processo", input_Processo.Text);
+                                            command.Parameters.AddWithValue("@categoria", input_Categoria.Text);
+                                            command.Parameters.AddWithValue("@arquivo", nomefinal);
+                                            command.Parameters.AddWithValue("@data", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                                            command.ExecuteNonQuery();
+                                            hpf.SaveAs(enderecofinal);
+                                            conexao.Close();
+                                            StatusLabel.Text = "Carregamento bem sucedido!";
+                                            input_Codigo.Text = input_Titulo.Text = input_Processo.Text = input_Categoria.Text = "";
+                                        }
+                                        else
+                                        {
+                                            StatusLabel.Text = "Já existe um documento com este código.";
+                                        }
+                                    }
+
+                                    catch (Exception ex)
+                                    {
+                                        StatusLabel.Text = "O carregamento falhou.\nO seguinte erro ocorreu: " + ex.Message;
+                                    }
+
+                                }
+                                else
                                 {
-                                    StatusLabel.Text = "O carregamento falhou.\nO seguinte erro ocorreu: " + ex.Message;
+                                    StatusLabel.Text = "Extensões permitidas: .pdf, .doc, .docx, .xls e .xlsx!";
                                 }
 
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                StatusLabel.Text = "Extensões permitidas: .pdf, .doc, .docx, .xls e .xlsx!";
+                                StatusLabel.Text = "O carregamento falhou.\nO seguinte erro ocorreu: " + ex.Message;
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            StatusLabel.Text = "O carregamento falhou.\nO seguinte erro ocorreu: " + ex.Message;
-                        }
+                   
                     }
                     else
                     {
