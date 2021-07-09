@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Consulta" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Consulta.aspx.cs" Inherits="TesteTecnicoQualyteam.Consulta" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h1>Consulta de Documentos.</h1>
+    <h1>Consulta de Documentos</h1>
      <p>Consulte todos os documentos armazenados pela empresa nesta página.</p>
 
       <hr />
