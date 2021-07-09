@@ -1,101 +1,112 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MySql.Data.MySqlClient;
+using System;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace TesteTecnicoQualyteam
 {
-            protected void upload_OnClick(object sender, EventArgs e)
+
+    public partial class Cadastro : Page
+    {
+
+        protected void btnUpload_Click(object sender, EventArgs e)
+        {
+            MySqlConnection conexao = new MySqlConnection("server=localhost;User Id=root;database=ttqdb; password=3578tr");
+
+            if (input_Codigo.Text != "" && input_Processo.Text != "" && input_Titulo.Text != "" && input_Categoria.Text != "")
             {
-                if (FileUploadControl.PostedFile.ContentLength < 8388608)
+                HttpPostedFile hpf = FileUploadControl.PostedFile;
+                try
                 {
-                    try
+                    if (FileUploadControl.HasFile)
                     {
-                        if (FileUploadControl.HasFile)
+                        try
                         {
-                            try
+
+                            string extensao = Path.GetExtension(hpf.FileName);
+                            string[] extensoes_permitidas = new string[] { ".pdf", ".doc", ".docx", ".xls", ".xlsx" };
+                            if (extensoes_permitidas.Contains<string>(extensao))
                             {
-                                //Aqui ele vai filtrar pelo tipo de arquivo
-                                if (FileUploadControl.PostedFile.ContentType == "image/jpeg" ||
-                                    FileUploadControl.PostedFile.ContentType == "image/png" ||
-                                    FileUploadControl.PostedFile.ContentType == "image/gif" ||
-                                    FileUploadControl.PostedFile.ContentType == "image/bmp")
+
+                                try
                                 {
-                                    try
+                                    conexao.Open();
+                                    MySqlCommand checarCodigo = new MySqlCommand("SELECT id FROM documentos WHERE id = '" + Int32.Parse(input_Codigo.Text) + "'", conexao);
+                                    if (checarCodigo.ExecuteScalar() == null)
                                     {
-                                        //Obtem o  HttpFileCollection
-                                        HttpFileCollection hfc = Request.Files;
-                                        for (int i = 0; i < hfc.Count; i++)
-                                        {
-                                            HttpPostedFile hpf = hfc[i];
-                                            if (hpf.ContentLength > 0)
-                                            {
-                                                //Pega o nome do arquivo
-                                                string nome = System.IO.Path.GetFileName(hpf.FileName);
-                                                //Pega a extensão do arquivo
-                                                string extensao = Path.GetExtension(hpf.FileName);
-                                                //Gera nome novo do Arquivo numericamente
-                                                string filename = string.Format("{0:00000000000000}", GerarID());
-                                                //Caminho a onde será salvo
-                                                hpf.SaveAs(Server.MapPath("~/uploads/fotos/") + filename + i
-                                                + extensao);
-
-                                                //Prefixo p/ img pequena
-                                                var prefixoP = "-p";
-                                                //Prefixo p/ img grande
-                                                var prefixoG = "-g";
-
-                                                //pega o arquivo já carregado
-                                                string pth = Server.MapPath("~/uploads/fotos/")
-                                                + filename + i + extensao;
-
-                                                //Redefine altura e largura da imagem e Salva o arquivo + prefixo
-                                                Redefinir.resizeImageAndSave(pth, 70, 53, prefixoP);
-                                                Redefinir.resizeImageAndSave(pth, 500, 331, prefixoG);
-                                            }
-
-                                        }
+                                        string filename = Path.GetFileNameWithoutExtension(hpf.FileName);
+                                        string nomefinal = Math.Abs(filename.GetHashCode()) + "_" + DateTime.Now.ToFileTimeUtc() + extensao;
+                                        string enderecofinal = Server.MapPath("./uploads/") + nomefinal;
+                                        string insertData = "INSERT INTO documentos(id, titulo, processo, categoria, arquivo, hora_upload) values (@id, @titulo, @processo, @categoria, @arquivo, @data)";
+                                        MySqlCommand command = new MySqlCommand(insertData, conexao);
+                                        command.Parameters.AddWithValue("@id", Int32.Parse(input_Codigo.Text));
+                                        command.Parameters.AddWithValue("@titulo", input_Titulo.Text);
+                                        command.Parameters.AddWithValue("@processo", input_Processo.Text);
+                                        command.Parameters.AddWithValue("@categoria", input_Categoria.Text);
+                                        command.Parameters.AddWithValue("@arquivo", nomefinal);
+                                        command.Parameters.AddWithValue("@data", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                                        command.ExecuteNonQuery();
+                                        hpf.SaveAs(enderecofinal);
+                                        conexao.Close();
+                                        StatusLabel.Text = "Carregamento bem sucedido!";
+                                        input_Codigo.Text = input_Titulo.Text = input_Processo.Text = input_Categoria.Text = "";
                                     }
-                                    catch (Exception ex)
+                                    else
                                     {
-
+                                        StatusLabel.Text = "Já existe um documento com este código.";
                                     }
-                                    // Mensagem se tudo ocorreu bem
-                                    StatusLabel.Text = "Todas imagens carregadas com sucesso!";
-
                                 }
-                                else
+
+                                catch (Exception ex)
                                 {
-                                    // Mensagem notifica que é permitido carregar apenas
-                                    // as imagens definida la em cima.
-                                    StatusLabel.Text = "É permitido carregar apenas imagens!";
+                                    StatusLabel.Text = "O carregamento falhou.\nO seguinte erro ocorreu: " + ex.Message;
                                 }
+
                             }
-                            catch (Exception ex)
+                            else
                             {
-                                // Mensagem notifica quando ocorre erros
-                                StatusLabel.Text = "O arquivo não pôde ser carregado.
-                                O seguinte erro ocorreu: " + ex.Message;
-              }
-    }
-}
-      catch (Exception ex)
-{
-    // Mensagem notifica quando ocorre erros
-    StatusLabel.Text = "O arquivo não pôde ser carregado.
-          O seguinte erro ocorreu: " + ex.Message;
-      }
-  }
-  else
-{
-    // Mensagem notifica quando imagem é superior a 8 MB
-    StatusLabel.Text = "Não é permitido carregar mais do que 8 MB";
-}
-}
+                                StatusLabel.Text = "Extensões permitidas: .pdf, .doc, .docx, .xls e .xlsx!";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            StatusLabel.Text = "O carregamento falhou.\nO seguinte erro ocorreu: " + ex.Message;
+                        }
+                    }
+                    else
+                    {
+                        StatusLabel.Text = "É necessário anexar um arquivo.";
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    StatusLabel.Text = "O carregamento falhou.\nO seguinte erro ocorreu: " + ex.Message;
+                }
+            }
+            else
+            {
+                StatusLabel.Text = "É necessário preencher todos os campos corretamente.";
+            }
+
         }
 
-    
-  
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
