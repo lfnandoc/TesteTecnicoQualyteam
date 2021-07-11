@@ -17,7 +17,7 @@ namespace TesteTecnicoQualyteam
                 || String.IsNullOrWhiteSpace(input_Titulo.Text)
                 || String.IsNullOrWhiteSpace(input_Categoria.Text))
             {
-                StatusLabel.Text = "É necessário preencher todos os campos corretamente.";
+                StatusLabel.Text = "Todos os campos são obrigatórios.";
                 return;
             }
 
@@ -41,7 +41,7 @@ namespace TesteTecnicoQualyteam
             string[] extensoes_permitidas = new string[] { ".pdf", ".doc", ".docx", ".xls", ".xlsx" };
             if (!extensoes_permitidas.Contains<string>(extensao))
             {
-                StatusLabel.Text = "Extensões permitidas: .pdf, .doc, .docx, .xls e .xlsx!";
+                StatusLabel.Text = "Extensões permitidas: *.pdf, *.doc, *.docx, *.xls e *.xlsx!";
                 return;
             }
 
