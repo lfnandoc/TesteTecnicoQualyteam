@@ -6,10 +6,10 @@
         Realize o cadastro de novos documentos aqui.<br />
         Todos os campos são obrigatórios.<br />
         <br />
-        <b>Extensões permitidas: *.pdf, *.doc, *.docx, *.xls e *.xlsx</b>
+        <b>Extensões permitidas: *.pdf, *.doc, *.docx, *.xls e *.xlsx</b><br />
+        <b>Tamanho máximo: 15 MB</b>
     </p>
-    <p><b>Tamanho máximo: 15 MB</b></p>
-
+    
     <hr />
 
     <asp:Label ID="labelCodigo" runat="server" Text="Código" AssociatedControlID="input_Codigo"></asp:Label>
@@ -50,4 +50,5 @@
         <asp:Button ID="btnUpload" runat="server" Text="Carregar" OnClick="btnUpload_Click" BackColor="#000000" BorderColor="#000000" Font-Bold="True" ForeColor="White" />
         <br />
     </div>
+
 </asp:Content>
