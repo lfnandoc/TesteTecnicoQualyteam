@@ -10,7 +10,6 @@ namespace TesteTecnicoQualyteam
         {
             // Classifica os documentos por título ao carregar a página
             gridDocumentos.Sort("titulo", SortDirection.Ascending);
-
         }
 
     }
