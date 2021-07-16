@@ -12,42 +12,42 @@
     
     <hr />
 
-    <asp:Label ID="labelCodigo" runat="server" Text="Código" AssociatedControlID="input_Codigo"></asp:Label>
+    <asp:Label ID="legenda_Codigo" runat="server" Text="Código" AssociatedControlID="entradaTexto_Codigo"></asp:Label>
     <br />
-    <asp:TextBox ID="input_Codigo" runat="server" MaxLength="9"></asp:TextBox>
+    <asp:TextBox ID="entradaTexto_Codigo" runat="server" MaxLength="9"></asp:TextBox>
     <asp:RegularExpressionValidator ID="RegularExpressionValidator1"
-        ControlToValidate="input_Codigo" runat="server"
+        ControlToValidate="entradaTexto_Codigo" runat="server"
         ForeColor="Red"
         ErrorMessage="Apenas números são permitidos no campo CÓDIGO."
         ValidationExpression="^[0-9]*$">
     </asp:RegularExpressionValidator>
     <br />
 
-    <asp:Label ID="labelTitulo" runat="server" Text="Título" AssociatedControlID="input_Titulo"></asp:Label>
+    <asp:Label ID="legenda_Titulo" runat="server" Text="Título" AssociatedControlID="entradaTexto_Titulo"></asp:Label>
     <br />
-    <asp:TextBox ID="input_Titulo" runat="server" MaxLength="50"></asp:TextBox>
-    <br />
-
-    <asp:Label ID="labelProcesso" runat="server" Text="Processo" AssociatedControlID="input_Processo"></asp:Label>
-    <br />
-    <asp:TextBox ID="input_Processo" runat="server" MaxLength="50"></asp:TextBox>
+    <asp:TextBox ID="entradaTexto_Titulo" runat="server" MaxLength="50"></asp:TextBox>
     <br />
 
-    <asp:Label ID="labelCategoria" runat="server" Text="Categoria" AssociatedControlID="input_Categoria"></asp:Label>
+    <asp:Label ID="legenda_Processo" runat="server" Text="Processo" AssociatedControlID="entradaTexto_Processo"></asp:Label>
     <br />
-    <asp:TextBox ID="input_Categoria" runat="server" MaxLength="50"></asp:TextBox>
+    <asp:TextBox ID="entradaTexto_Processo" runat="server" MaxLength="50"></asp:TextBox>
+    <br />
+
+    <asp:Label ID="legenda_Categoria" runat="server" Text="Categoria" AssociatedControlID="entradaTexto_Categoria"></asp:Label>
+    <br />
+    <asp:TextBox ID="entradaTexto_Categoria" runat="server" MaxLength="50"></asp:TextBox>
     <br />
 
     <br />
-    <asp:Label ID="labelArquivo" runat="server" Font-Bold="True" Text="Arquivo"></asp:Label>
+    <asp:Label ID="legenda_Arquivo" runat="server" Font-Bold="True" Text="Arquivo"></asp:Label>
     <br />
     <div>
         <br />
-        <asp:FileUpload ID="FileUploadControl" runat="server" class="multi" />
+        <asp:FileUpload ID="controlador_CarregamentoArquivo" runat="server" class="multi" />
         <br />
-        <asp:Label runat="server" ID="StatusLabel" Text="" ForeColor="Red" />
+        <asp:Label runat="server" ID="legenda_EstadoCarregamento" Text="" ForeColor="Red" />
         <br />
-        <asp:Button ID="btnUpload" runat="server" Text="Carregar" OnClick="btnUpload_Click" BackColor="#000000" BorderColor="#000000" Font-Bold="True" ForeColor="White" />
+        <asp:Button ID="botaoCarregar" runat="server" Text="Carregar" OnClick="botaoCarregar_Clique" BackColor="#000000" BorderColor="#000000" Font-Bold="True" ForeColor="White" />
         <br />
     </div>
 

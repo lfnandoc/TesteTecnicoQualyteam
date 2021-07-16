@@ -8,8 +8,7 @@ namespace TesteTecnicoQualyteam
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Classifica os documentos por título ao carregar a página
-            gridDocumentos.Sort("titulo", SortDirection.Ascending);
+          tabelaDocumentos.Sort("titulo", SortDirection.Ascending);
         }
 
     }

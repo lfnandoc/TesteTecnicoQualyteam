@@ -4,7 +4,7 @@
     <h1>Consulta de Documentos</h1>
     <p>Consulte todos os documentos armazenados pela empresa nesta página.</p>
     <hr />
-    <asp:GridView ID="gridDocumentos" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" DataKeyNames="id" DataSourceID="TTQdb" ForeColor="Black" GridLines="Horizontal" PageSize="20" Width="700px">
+    <asp:GridView ID="tabelaDocumentos" runat="server" AllowPaging="True" AllowSorting="True" AutoGenerateColumns="False" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" DataKeyNames="id" DataSourceID="TTQdb" ForeColor="Black" GridLines="Horizontal" PageSize="20" Width="700px">
         <Columns>
             <asp:BoundField DataField="id" HeaderText="Código" ReadOnly="True" SortExpression="id" HeaderStyle-CssClass="text-center">
                 <HeaderStyle CssClass="text-center"></HeaderStyle>
@@ -20,8 +20,8 @@
             </asp:BoundField>
             <asp:TemplateField HeaderText="Arquivo" SortExpression="arquivo" HeaderStyle-CssClass="text-center">
                 <ItemTemplate>
-                    <asp:HyperLink ID="DownloadLink" runat="server" NavigateUrl='<%# Eval("arquivo", "/uploads/{0}") %>' Target="_blank">
-                        <asp:Button ID="ButtonDownload" runat="server" Text="Download" UseSubmitBehavior="False" />
+                    <asp:HyperLink ID="linkDownload" runat="server" NavigateUrl='<%# Eval("arquivo", "/uploads/{0}") %>' Target="_blank">
+                        <asp:Button ID="botaoDownload" runat="server" Text="Download" UseSubmitBehavior="False" />
                     </asp:HyperLink>
                 </ItemTemplate>
 

@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -9,90 +10,89 @@ namespace TesteTecnicoQualyteam
 {
     public partial class Cadastro : Page
     {
-        protected void btnUpload_Click(object sender, EventArgs e)
+        protected void NovaMensagemEstadoCarregamento(String mensagem, Color cor)
         {
-            // Verifica se todos os campos foram preenchidos, também não aceitando strings apenas com espaços
-            if (String.IsNullOrWhiteSpace(input_Codigo.Text)
-                || String.IsNullOrWhiteSpace(input_Processo.Text)
-                || String.IsNullOrWhiteSpace(input_Titulo.Text)
-                || String.IsNullOrWhiteSpace(input_Categoria.Text))
-            {
-                StatusLabel.Text = "Todos os campos são obrigatórios.";
-                return;
-            }
+            legenda_EstadoCarregamento.Text = mensagem;
+            legenda_EstadoCarregamento.ForeColor = cor;
+        }
 
-            //Verifica se há arquivo anexado
-            if (!FileUploadControl.HasFile)
-            {
-                StatusLabel.Text = "É necessário selecionar um arquivo.";
-                return;
-            }
-
-            //Verifica se o arquivo tem menos de 15mb
-            HttpPostedFile hpf = FileUploadControl.PostedFile;
-            if (hpf.ContentLength > 15728640)
-            {
-                StatusLabel.Text = "O tamanho do arquivo não pode exceder 15 MB.";
-                return;
-            }
-
-            //Verifica a extensão do arquivo
-            string extensao = Path.GetExtension(hpf.FileName);
+        protected Boolean ExtensaoValida(String extensao)
+        {
             string[] extensoes_permitidas = new string[] { ".pdf", ".doc", ".docx", ".xls", ".xlsx" };
-            if (!extensoes_permitidas.Contains<string>(extensao))
+            if (extensoes_permitidas.Contains<string>(extensao))
             {
-                StatusLabel.Text = "Extensões permitidas: *.pdf, *.doc, *.docx, *.xls e *.xlsx!";
+                return true;
+            }
+            return false;
+        }
+
+        protected void CarregarArquivo(HttpPostedFile arquivo)
+        {
+            MySqlConnection conexaoMySQL = new MySqlConnection("server=localhost;User Id=root;database=ttqdb; password=3578tr");
+            conexaoMySQL.Open();
+            MySqlCommand checarCodigo = new MySqlCommand("SELECT id FROM documentos WHERE id = '" + Int32.Parse(entradaTexto_Codigo.Text) + "'", conexaoMySQL);
+            if (checarCodigo.ExecuteScalar() == null)
+            {
+                string nomeArquivoSelecionado = Path.GetFileNameWithoutExtension(arquivo.FileName);
+                string nomeArquivoCarregadoNoServidor = Math.Abs(nomeArquivoSelecionado.GetHashCode()) + "_" + DateTime.Now.ToFileTimeUtc() + Path.GetExtension(arquivo.FileName);
+                string enderecoArquivoCarregadoNoServidor = Server.MapPath("./uploads/") + nomeArquivoCarregadoNoServidor;
+                string comandoInsercaoDB = "INSERT INTO documentos(id, titulo, processo, categoria, arquivo, hora_upload) values (@id, @titulo, @processo, @categoria, @arquivo, @data)";
+                MySqlCommand comandoMySQL = new MySqlCommand(comandoInsercaoDB, conexaoMySQL);
+                comandoMySQL.Parameters.AddWithValue("@id", Int32.Parse(entradaTexto_Codigo.Text));
+                comandoMySQL.Parameters.AddWithValue("@titulo", entradaTexto_Titulo.Text);
+                comandoMySQL.Parameters.AddWithValue("@processo", entradaTexto_Processo.Text);
+                comandoMySQL.Parameters.AddWithValue("@categoria", entradaTexto_Categoria.Text);
+                comandoMySQL.Parameters.AddWithValue("@arquivo", nomeArquivoCarregadoNoServidor);
+                comandoMySQL.Parameters.AddWithValue("@data", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                comandoMySQL.ExecuteNonQuery();
+                arquivo.SaveAs(enderecoArquivoCarregadoNoServidor);
+                conexaoMySQL.Close();
+                NovaMensagemEstadoCarregamento("Carregamento do documento '" + entradaTexto_Titulo.Text + "' bem sucedido!", Color.Green);
+                entradaTexto_Codigo.Text = entradaTexto_Titulo.Text = entradaTexto_Processo.Text = entradaTexto_Categoria.Text = "";
+            }
+            else
+            {
+                NovaMensagemEstadoCarregamento("Já existe um documento com este código.", Color.Red);
+            }
+        }
+
+        protected void botaoCarregar_Clique(object sender, EventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(entradaTexto_Codigo.Text)
+                || String.IsNullOrWhiteSpace(entradaTexto_Processo.Text)
+                || String.IsNullOrWhiteSpace(entradaTexto_Titulo.Text)
+                || String.IsNullOrWhiteSpace(entradaTexto_Categoria.Text))
+            {
+                NovaMensagemEstadoCarregamento("Todos os campos são obrigatórios.", Color.Red);
+                return;
+            }
+
+            if (!controlador_CarregamentoArquivo.HasFile)
+            {
+                NovaMensagemEstadoCarregamento("É necessário selecionar um arquivo.", Color.Red);
+                return;
+            }
+
+            HttpPostedFile arquivoSelecionado = controlador_CarregamentoArquivo.PostedFile;
+            if (arquivoSelecionado.ContentLength > 15728640)
+            {
+                NovaMensagemEstadoCarregamento("O tamanho do arquivo não pode exceder 15 MB.", Color.Red);
+                return;
+            }
+
+            if (!ExtensaoValida(Path.GetExtension(arquivoSelecionado.FileName)))
+            {
+                NovaMensagemEstadoCarregamento("Extensões permitidas: *.pdf, *.doc, *.docx, *.xls e *.xlsx!", Color.Red);
                 return;
             }
 
             try
             {
-                //Conexão à database MySql
-                MySqlConnection conexao = new MySqlConnection("server=localhost;User Id=root;database=ttqdb; password=3578tr");
-                conexao.Open();
-
-                //Verifica se já existe o código na database
-                MySqlCommand checarCodigo = new MySqlCommand("SELECT id FROM documentos WHERE id = '" + Int32.Parse(input_Codigo.Text) + "'", conexao);
-                if (checarCodigo.ExecuteScalar() == null)
-                {
-                    string filename = Path.GetFileNameWithoutExtension(hpf.FileName);
-
-                    // O nome do arquivo será uma hash do nome original + a hora atual, para evitar duplicados
-                    string nomefinal = Math.Abs(filename.GetHashCode()) + "_" + DateTime.Now.ToFileTimeUtc() + extensao;
-
-                    // O arquivo será salvo na pasta /uploads/ do servidor
-                    string enderecofinal = Server.MapPath("./uploads/") + nomefinal; 
-
-                    //Montagem do comando para inserir na database
-                    string insertData = "INSERT INTO documentos(id, titulo, processo, categoria, arquivo, hora_upload) values (@id, @titulo, @processo, @categoria, @arquivo, @data)";
-                    MySqlCommand command = new MySqlCommand(insertData, conexao);
-                    command.Parameters.AddWithValue("@id", Int32.Parse(input_Codigo.Text));
-                    command.Parameters.AddWithValue("@titulo", input_Titulo.Text);
-                    command.Parameters.AddWithValue("@processo", input_Processo.Text);
-                    command.Parameters.AddWithValue("@categoria", input_Categoria.Text);
-                    command.Parameters.AddWithValue("@arquivo", nomefinal);
-                    command.Parameters.AddWithValue("@data", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                    command.ExecuteNonQuery();
-
-                    //Salva o arquivo no servidor e fecha a conexão SQL
-                    hpf.SaveAs(enderecofinal); 
-                    conexao.Close();
-
-                    //Mensagem de carregamento realizado com sucesso
-                    StatusLabel.Text = "Carregamento do documento '" + input_Titulo.Text + "' bem sucedido!";
-
-                    //Esvazia as caixas na página
-                    input_Codigo.Text = input_Titulo.Text = input_Processo.Text = input_Categoria.Text = ""; 
-                }
-                else
-                {
-                    StatusLabel.Text = "Já existe um documento com este código.";
-                }
+                CarregarArquivo(arquivoSelecionado);
             }
             catch (Exception ex)
             {
-                // Se acontecer qualquer erro, retornará a mensagem
-                StatusLabel.Text = "O carregamento falhou.\nO seguinte erro ocorreu: " + ex.Message;
+                NovaMensagemEstadoCarregamento("O carregamento falhou.\nO seguinte erro ocorreu: " + ex.Message, Color.Red);
             }
         }
     }

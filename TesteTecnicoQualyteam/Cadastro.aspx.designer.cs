@@ -15,22 +15,22 @@ namespace TesteTecnicoQualyteam
     {
 
         /// <summary>
-        /// labelCodigo control.
+        /// legenda_Codigo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelCodigo;
+        protected global::System.Web.UI.WebControls.Label legenda_Codigo;
 
         /// <summary>
-        /// input_Codigo control.
+        /// entradaTexto_Codigo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox input_Codigo;
+        protected global::System.Web.UI.WebControls.TextBox entradaTexto_Codigo;
 
         /// <summary>
         /// RegularExpressionValidator1 control.
@@ -42,93 +42,93 @@ namespace TesteTecnicoQualyteam
         protected global::System.Web.UI.WebControls.RegularExpressionValidator RegularExpressionValidator1;
 
         /// <summary>
-        /// labelTitulo control.
+        /// legenda_Titulo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelTitulo;
+        protected global::System.Web.UI.WebControls.Label legenda_Titulo;
 
         /// <summary>
-        /// input_Titulo control.
+        /// entradaTexto_Titulo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox input_Titulo;
+        protected global::System.Web.UI.WebControls.TextBox entradaTexto_Titulo;
 
         /// <summary>
-        /// labelProcesso control.
+        /// legenda_Processo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelProcesso;
+        protected global::System.Web.UI.WebControls.Label legenda_Processo;
 
         /// <summary>
-        /// input_Processo control.
+        /// entradaTexto_Processo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox input_Processo;
+        protected global::System.Web.UI.WebControls.TextBox entradaTexto_Processo;
 
         /// <summary>
-        /// labelCategoria control.
+        /// legenda_Categoria control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelCategoria;
+        protected global::System.Web.UI.WebControls.Label legenda_Categoria;
 
         /// <summary>
-        /// input_Categoria control.
+        /// entradaTexto_Categoria control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox input_Categoria;
+        protected global::System.Web.UI.WebControls.TextBox entradaTexto_Categoria;
 
         /// <summary>
-        /// labelArquivo control.
+        /// legenda_Arquivo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label labelArquivo;
+        protected global::System.Web.UI.WebControls.Label legenda_Arquivo;
 
         /// <summary>
-        /// FileUploadControl control.
+        /// controlador_CarregamentoArquivo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload FileUploadControl;
+        protected global::System.Web.UI.WebControls.FileUpload controlador_CarregamentoArquivo;
 
         /// <summary>
-        /// StatusLabel control.
+        /// legenda_EstadoCarregamento control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label StatusLabel;
+        protected global::System.Web.UI.WebControls.Label legenda_EstadoCarregamento;
 
         /// <summary>
-        /// btnUpload control.
+        /// botaoCarregar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnUpload;
+        protected global::System.Web.UI.WebControls.Button botaoCarregar;
     }
 }
